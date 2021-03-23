@@ -1,0 +1,21 @@
+//npm init -y
+//npm i -s express body-parser cors
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const app = express();
+const router = express.Router();
+const PORT = 6969;
+
+app.use(cors()); //fontent เรียก API backend
+app.use('/api', bodyParser.json(), router);
+app.use('/api', bodyParser.urlencoded({ extended: false }), router);
+
+
+
+
+
+app.listen(PORT, () => {
+    console.log('Server running is port',PORT);
+})

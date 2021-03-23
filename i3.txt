@@ -1,0 +1,55 @@
+//npm init -y
+//npm i -s express body-parser cors
+//npm i -g nodemon
+//npm i -s -d nodemon
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+
+const app = express();
+const router = express.Router();
+const PORT = 6969;
+
+app.use(cors()); //fontend เรียก API backend
+app.use('/api', bodyParser.json(), router);
+app.use('/api', bodyParser.urlencoded({ extended: false }), router);
+
+//ข้อมูล
+let products = {
+    list: [
+        { id: 1, name: "A", price: 123, amount: 10 },
+        { id: 2, name: "B", price: 456, amount: 20 }
+    ]
+}
+
+//nodemon index.js
+
+//route
+//http://localhost:6969/api/products PORT 6969
+//http://localhost/api/product PORT 80
+
+router.route('/products')
+    .get((req, res) => {
+        res.send(products.list)  //res.send(product)
+    })
+    .post((req, res) => {
+        let id = (products.list.length) ? products.list[products.list.length - 1].id + 1 : 1
+        //console.log(products.list[products.list.length - 1].id + 1)
+        let newproducts = {}
+        newproducts.id = id
+        newproducts.name = req.body.name
+        newproducts.price = req.body.price
+        newproducts.amount = req.body.amount
+        //เอาข้อมูลมาใส่ต่อใน products
+        products = { list: [...products.list, newproducts] }
+        //console.log(req.body.name);
+        res.json(products)
+    })
+
+
+
+
+
+app.listen(PORT, () => {
+    console.log('Server running is port', PORT);
+})
